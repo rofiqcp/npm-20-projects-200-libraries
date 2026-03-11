@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Johnson | Full Stack Developer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            accent: { start: '#7c3aed', end: '#2563eb' }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="#home" class="text-xl font-bold gradient-text">Alex.dev</a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#home" class="nav-link active" data-section="home">Home</a>
+          <a href="#about" class="nav-link" data-section="about">About</a>
+          <a href="#projects" class="nav-link" data-section="projects">Projects</a>
+          <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="darkToggle" class="dark-toggle" aria-label="Toggle dark mode">
+            <i data-feather="sun" class="w-4 h-4 hidden dark:block text-yellow-400"></i>
+            <i data-feather="moon" class="w-4 h-4 block dark:hidden text-slate-600"></i>
+            <span class="text-sm font-medium text-slate-600 dark:text-slate-300 hidden sm:block">Theme</span>
+          </button>
+          <!-- Mobile menu toggle -->
+          <button id="menuToggle" class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <i data-feather="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu md:hidden">
+      <a href="#home" class="nav-link block py-2 px-4 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Home</a>
+      <a href="#about" class="nav-link block py-2 px-4 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">About</a>
+      <a href="#projects" class="nav-link block py-2 px-4 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Projects</a>
+      <a href="#contact" class="nav-link block py-2 px-4 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="min-h-screen flex items-center hero-bg pt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+      <div class="max-w-3xl">
+        <p class="text-purple-600 dark:text-purple-400 font-semibold mb-3 reveal">👋 Hello, I'm</p>
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-4 reveal">
+          <span class="gradient-text">Alex Johnson</span>
+        </h1>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-600 dark:text-slate-300 mb-6 reveal">
+          Full Stack Developer
+        </h2>
+        <p class="text-lg text-slate-500 dark:text-slate-400 mb-10 max-w-xl reveal">
+          I build beautiful, performant web applications with modern technologies.
+          Passionate about clean code, user experience, and solving real-world problems.
+        </p>
+        <div class="flex flex-wrap gap-4 reveal">
+          <a href="#projects" class="btn-primary flex items-center gap-2">
+            <i data-feather="code" class="w-4 h-4"></i>
+            View Projects
+          </a>
+          <a href="#contact" class="btn-outline flex items-center gap-2">
+            <i data-feather="mail" class="w-4 h-4"></i>
+            Contact Me
+          </a>
+        </div>
+
+        <!-- Social Links -->
+        <div class="flex gap-4 mt-10 reveal">
+          <a href="#" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-purple-600 transition-all" aria-label="GitHub">
+            <i data-feather="github" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition-all" aria-label="LinkedIn">
+            <i data-feather="linkedin" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-sky-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-sky-600 transition-all" aria-label="Twitter">
+            <i data-feather="twitter" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="bg-slate-50 dark:bg-slate-800/50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="section-title reveal">About Me</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="reveal-left">
+          <p class="text-slate-600 dark:text-slate-400 text-lg mb-4">
+            I'm a passionate full stack developer with 5+ years of experience building
+            web applications. I specialize in React, Node.js, and cloud technologies.
+          </p>
+          <p class="text-slate-600 dark:text-slate-400 mb-6">
+            When I'm not coding, you'll find me contributing to open-source projects,
+            writing technical articles, or exploring new technologies.
+          </p>
+          <a href="#contact" class="btn-primary inline-flex items-center gap-2">
+            <i data-feather="download" class="w-4 h-4"></i>
+            Download Resume
+          </a>
+        </div>
+
+        <div class="reveal">
+          <h3 class="text-xl font-bold mb-6 text-slate-700 dark:text-slate-200">Tech Stack</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div class="skill-card">
+              <div class="text-2xl mb-2">🌐</div>
+              <div class="font-semibold text-sm">HTML / CSS</div>
+            </div>
+            <div class="skill-card">
+              <div class="text-2xl mb-2">⚡</div>
+              <div class="font-semibold text-sm">JavaScript</div>
+            </div>
+            <div class="skill-card">
+              <div class="text-2xl mb-2">⚛️</div>
+              <div class="font-semibold text-sm">React</div>
+            </div>
+            <div class="skill-card">
+              <div class="text-2xl mb-2">🟢</div>
+              <div class="font-semibold text-sm">Node.js</div>
+            </div>
+            <div class="skill-card">
+              <div class="text-2xl mb-2">🐍</div>
+              <div class="font-semibold text-sm">Python</div>
+            </div>
+            <div class="skill-card">
+              <div class="text-2xl mb-2">🔧</div>
+              <div class="font-semibold text-sm">Git</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="section-title reveal">Featured Projects</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Project 1 -->
+        <div class="project-card reveal">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center mb-4">
+            <i data-feather="shopping-cart" class="w-6 h-6 text-white"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">E-commerce Platform</h3>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">
+            A full-featured e-commerce platform with cart, payments, and inventory management.
+          </p>
+          <div class="mb-4">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Stripe</span>
+          </div>
+          <div class="flex gap-3">
+            <a href="#" class="flex items-center gap-1 text-sm text-purple-600 dark:text-purple-400 hover:underline">
+              <i data-feather="github" class="w-4 h-4"></i> Code
+            </a>
+            <a href="#" class="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              <i data-feather="external-link" class="w-4 h-4"></i> Live Demo
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card reveal">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-teal-500 flex items-center justify-center mb-4">
+            <i data-feather="check-square" class="w-6 h-6 text-white"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Task Manager App</h3>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">
+            A collaborative task management tool with real-time updates and team features.
+          </p>
+          <div class="mb-4">
+            <span class="tag">React</span>
+            <span class="tag">Firebase</span>
+            <span class="tag">Tailwind</span>
+            <span class="tag">Redux</span>
+          </div>
+          <div class="flex gap-3">
+            <a href="#" class="flex items-center gap-1 text-sm text-purple-600 dark:text-purple-400 hover:underline">
+              <i data-feather="github" class="w-4 h-4"></i> Code
+            </a>
+            <a href="#" class="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              <i data-feather="external-link" class="w-4 h-4"></i> Live Demo
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card reveal">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center mb-4">
+            <i data-feather="cloud" class="w-6 h-6 text-white"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Weather Dashboard</h3>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">
+            Real-time weather dashboard with forecasts, charts, and location-based data.
+          </p>
+          <div class="mb-4">
+            <span class="tag">React</span>
+            <span class="tag">Chart.js</span>
+            <span class="tag">OpenWeather</span>
+          </div>
+          <div class="flex gap-3">
+            <a href="#" class="flex items-center gap-1 text-sm text-purple-600 dark:text-purple-400 hover:underline">
+              <i data-feather="github" class="w-4 h-4"></i> Code
+            </a>
+            <a href="#" class="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              <i data-feather="external-link" class="w-4 h-4"></i> Live Demo
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="bg-slate-50 dark:bg-slate-800/50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="section-title reveal">Get In Touch</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="reveal-left">
+          <h3 class="text-2xl font-bold mb-4">Let's Work Together</h3>
+          <p class="text-slate-500 dark:text-slate-400 mb-6">
+            I'm currently available for freelance work and full-time positions.
+            If you have a project or opportunity, let's talk!
+          </p>
+          <div class="space-y-4">
+            <div class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+              <i data-feather="mail" class="w-5 h-5 text-purple-500"></i>
+              <span>alex@example.com</span>
+            </div>
+            <div class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+              <i data-feather="map-pin" class="w-5 h-5 text-purple-500"></i>
+              <span>San Francisco, CA</span>
+            </div>
+            <div class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+              <i data-feather="globe" class="w-5 h-5 text-purple-500"></i>
+              <span>Available for remote work</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <form id="contactForm" class="space-y-4" novalidate>
+            <div id="formAlert"></div>
+            <div>
+              <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
+              <input type="text" id="name" name="name" class="form-input" placeholder="John Doe" />
+              <p class="text-red-500 text-xs mt-1 hidden" id="nameError">Please enter your name.</p>
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
+              <input type="email" id="email" name="email" class="form-input" placeholder="john@example.com" />
+              <p class="text-red-500 text-xs mt-1 hidden" id="emailError">Please enter a valid email address.</p>
+            </div>
+            <div>
+              <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Message</label>
+              <textarea id="message" name="message" rows="5" class="form-input resize-none" placeholder="Tell me about your project..."></textarea>
+              <p class="text-red-500 text-xs mt-1 hidden" id="messageError">Please enter a message.</p>
+            </div>
+            <button type="submit" class="btn-primary w-full flex items-center justify-center gap-2">
+              <i data-feather="send" class="w-4 h-4"></i>
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-slate-500 dark:text-slate-400 text-sm">
+          &copy; 2024 Alex Johnson. All rights reserved.
+        </p>
+        <div class="flex gap-4">
+          <a href="#" class="text-slate-500 hover:text-purple-600 dark:hover:text-purple-400 transition-colors" aria-label="GitHub">
+            <i data-feather="github" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" aria-label="LinkedIn">
+            <i data-feather="linkedin" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="text-slate-500 hover:text-sky-600 dark:hover:text-sky-400 transition-colors" aria-label="Twitter">
+            <i data-feather="twitter" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
