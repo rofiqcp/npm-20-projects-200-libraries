@@ -1,0 +1,99 @@
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  bio: String
+  avatarUrl: String
+  followersCount: Int!
+  followingCount: Int!
+  createdAt: String!
+  isFollowing: Boolean
+  posts: [Post!]
+}
+
+type Post {
+  id: ID!
+  content: String!
+  likesCount: Int!
+  commentsCount: Int!
+  retweetsCount: Int!
+  createdAt: String!
+  author: User!
+  isLiked: Boolean
+  isRetweeted: Boolean
+  comments: [Comment!]
+}
+
+type Comment {
+  id: ID!
+  content: String!
+  createdAt: String!
+  author: User!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type Notification {
+  id: ID!
+  type: String!
+  message: String!
+  from: User
+  post: Post
+  createdAt: String!
+  read: Boolean!
+}
+
+type FeedResult {
+  posts: [Post!]!
+  hasMore: Boolean!
+  nextCursor: String
+}
+
+input RegisterInput {
+  username: String!
+  email: String!
+  password: String!
+  bio: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreatePostInput {
+  content: String!
+}
+
+type Query {
+  me: User
+  user(username: String!): User
+  feed(cursor: String, limit: Int): FeedResult!
+  post(id: ID!): Post
+  searchUsers(query: String!): [User!]!
+  notifications: [Notification!]!
+  trendingHashtags: [String!]!
+  suggestedUsers: [User!]!
+}
+
+type Mutation {
+  register(input: RegisterInput!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+  createPost(input: CreatePostInput!): Post!
+  deletePost(id: ID!): Boolean!
+  likePost(postId: ID!): Post!
+  unlikePost(postId: ID!): Post!
+  retweetPost(postId: ID!): Post!
+  commentOnPost(postId: ID!, content: String!): Comment!
+  followUser(userId: ID!): User!
+  unfollowUser(userId: ID!): User!
+  markNotificationsRead: Boolean!
+}
+
+type Subscription {
+  newPost: Post!
+  newNotification: Notification!
+}

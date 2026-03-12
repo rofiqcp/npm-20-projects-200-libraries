@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white font-sans;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#1d9bf0] hover:bg-[#1a8cd8] text-white font-bold py-2 px-4 rounded-full transition-colors;
+  }
+  .btn-ghost {
+    @apply text-[#1d9bf0] border border-[#1d9bf0] hover:bg-[#1d9bf0]/10 font-bold py-2 px-4 rounded-full transition-colors;
+  }
+  .tweet-action {
+    @apply flex items-center gap-1 text-[#536471] hover:text-[#1d9bf0] transition-colors cursor-pointer text-sm;
+  }
+  .tweet-action:hover svg {
+    @apply stroke-[#1d9bf0];
+  }
+  .sidebar-link {
+    @apply flex items-center gap-4 p-3 rounded-full hover:bg-white/10 transition-colors text-xl cursor-pointer;
+  }
+  .input-field {
+    @apply w-full bg-transparent border-b border-[#2f3336] focus:border-[#1d9bf0] outline-none py-2 text-white placeholder-[#536471];
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2f3336;
+  border-radius: 2px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes pulse-like {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+.like-pulse {
+  animation: pulse-like 0.3s ease;
+}
