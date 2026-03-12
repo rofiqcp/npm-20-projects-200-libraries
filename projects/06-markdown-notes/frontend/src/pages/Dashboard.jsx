@@ -56,7 +56,7 @@ export default function Dashboard() {
     }
   };
 
-  const saveCurrentNote = async () => {
+  const saveCurrentNote = useCallback(async () => {
     if (!currentNote) return;
     setSaving(true);
     try {
@@ -68,7 +68,7 @@ export default function Dashboard() {
     } finally {
       setSaving(false);
     }
-  };
+  }, [currentNote, title, content, tags, token, fetchNotes]);
 
   const createNote = async () => {
     if (dirty && currentNote) await saveCurrentNote();
@@ -125,7 +125,7 @@ export default function Dashboard() {
       saveCurrentNote();
     }, 3000);
     return () => clearTimeout(timer);
-  }, [dirty, content, title, tags]);
+  }, [dirty, content, title, tags, saveCurrentNote]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
