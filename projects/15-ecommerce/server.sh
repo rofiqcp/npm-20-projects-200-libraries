@@ -4,8 +4,15 @@
 # Tech Stack: Express.js + React | PostgreSQL + Redis | Stripe
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKEND_PORT=5000
-FRONTEND_PORT=3000
+ENV_FILE="$PROJECT_DIR/.env"
+
+# Load .env if it exists
+[ -f "$ENV_FILE" ] && source "$ENV_FILE"
+
+# Port defaults (override via .env)
+BACKEND_PORT="${BACKEND_PORT:-5000}"
+FRONTEND_PORT="${FRONTEND_PORT:-3000}"
+
 BACKEND_PID_FILE="$PROJECT_DIR/.backend.pid"
 FRONTEND_PID_FILE="$PROJECT_DIR/.frontend.pid"
 
@@ -16,231 +23,139 @@ show_menu() {
     echo "║   Stack: Express + React | PostgreSQL + Redis    ║"
     echo "╚══════════════════════════════════════════════════╝"
     echo ""
-    echo "1.  Install Dependencies"
-    echo "2.  Start All Servers"
-    echo "3.  Stop All Servers"
-    echo "4.  Restart All Servers"
-    echo "5.  Status"
-    echo "6.  Start Databases (Docker)"
-    echo "7.  Stop Databases (Docker)"
-    echo "8.  View Backend Logs"
-    echo "9.  View Frontend Logs"
-    echo "10. Run Database Migrations"
-    echo "11. Run Tests"
-    echo "0.  Exit"
+    echo "1. Start"
+    echo "2. Stop"
+    echo "3. Status"
+    echo "4. Edit Ports (.env)"
+    echo "5. Install, Build & Start"
+    echo "0. Exit"
     echo ""
 }
 
-install_deps() {
-    echo "📦 Installing dependencies..."
-    if [ -f "$PROJECT_DIR/package.json" ]; then
-        cd "$PROJECT_DIR" && npm install
-    fi
-    if [ -f "$PROJECT_DIR/backend/package.json" ]; then
-        echo "  → Backend dependencies..."
-        cd "$PROJECT_DIR/backend" && npm install
-    fi
-    if [ -f "$PROJECT_DIR/frontend/package.json" ]; then
-        echo "  → Frontend dependencies..."
-        cd "$PROJECT_DIR/frontend" && npm install
-    fi
-    echo "✅ Dependencies installed"
-}
-
-start_databases() {
-    echo "🗄️  Starting databases (Docker)..."
-    if command -v docker &>/dev/null; then
-        docker run -d --name ecommerce-postgres \
-            -e POSTGRES_DB=ecommerce \
-            -e POSTGRES_USER=postgres \
-            -e POSTGRES_PASSWORD=postgres \
-            -p 5432:5432 \
-            postgres:14 2>/dev/null || docker start ecommerce-postgres 2>/dev/null
-        docker run -d --name ecommerce-redis \
-            -p 6379:6379 \
-            redis:alpine 2>/dev/null || docker start ecommerce-redis 2>/dev/null
-        sleep 3
-        echo "✅ PostgreSQL running on port 5432"
-        echo "✅ Redis running on port 6379"
-    else
-        echo "⚠️  Docker not found. Please start PostgreSQL and Redis manually."
-        echo "   PostgreSQL: port 5432 | Redis: port 6379"
-    fi
-}
-
-stop_databases() {
-    echo "⏸  Stopping databases..."
-    if command -v docker &>/dev/null; then
-        docker stop ecommerce-postgres ecommerce-redis 2>/dev/null
-        echo "✅ Databases stopped"
-    else
-        echo "⚠️  Docker not found."
-    fi
-}
-
 start_backend() {
-    echo "🚀 Starting backend (Express.js on port $BACKEND_PORT)..."
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+    BACKEND_PORT="${BACKEND_PORT:-5000}"
+    [ -f "$BACKEND_PID_FILE" ] && kill -0 "$(cat "$BACKEND_PID_FILE")" 2>/dev/null && echo "⚠️  Backend already running" && return 0
     local backend_dir="$PROJECT_DIR/backend"
-    if [ ! -d "$backend_dir" ]; then
-        backend_dir="$PROJECT_DIR"
+    [ ! -d "$backend_dir" ] && backend_dir="$PROJECT_DIR"
+    if [ -f "$backend_dir/package.json" ]; then
+        echo "🚀 Starting Express backend on port $BACKEND_PORT..."
+        cd "$backend_dir"
+        local start_cmd="node server.js"
+        grep -q '"dev"' package.json 2>/dev/null && start_cmd="npm run dev"
+        grep -q '"start"' package.json 2>/dev/null && start_cmd="npm start"
+        PORT=$BACKEND_PORT nohup $start_cmd > "$PROJECT_DIR/.backend.log" 2>&1 &
+        echo $! > "$BACKEND_PID_FILE"
+        echo "✅ Backend started (PID: $!) → http://localhost:$BACKEND_PORT"
+    else
+        echo "❌ Backend package.json not found."
     fi
-    cd "$backend_dir"
-    local start_cmd="node server.js"
-    if [ -f "package.json" ] && grep -q '"start"' package.json; then
-        start_cmd="npm start"
-    elif [ -f "package.json" ] && grep -q '"dev"' package.json; then
-        start_cmd="npm run dev"
-    fi
-    nohup $start_cmd > "$PROJECT_DIR/.backend.log" 2>&1 &
-    echo $! > "$BACKEND_PID_FILE"
-    echo "✅ Backend started (PID: $!)"
 }
 
 start_frontend() {
-    echo "🌐 Starting frontend (React on port $FRONTEND_PORT)..."
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+    FRONTEND_PORT="${FRONTEND_PORT:-3000}"
+    [ -f "$FRONTEND_PID_FILE" ] && kill -0 "$(cat "$FRONTEND_PID_FILE")" 2>/dev/null && echo "⚠️  Frontend already running" && return 0
     local frontend_dir="$PROJECT_DIR/frontend"
-    if [ ! -d "$frontend_dir" ]; then
-        echo "⚠️  Frontend directory not found. Skipping."
-        return
+    [ ! -d "$frontend_dir" ] && frontend_dir="$PROJECT_DIR"
+    if [ -f "$frontend_dir/package.json" ]; then
+        echo "🚀 Starting React frontend on port $FRONTEND_PORT..."
+        cd "$frontend_dir"
+        nohup npx vite --port "$FRONTEND_PORT" > "$PROJECT_DIR/.frontend.log" 2>&1 &
+        echo $! > "$FRONTEND_PID_FILE"
+        echo "✅ Frontend started (PID: $!) → http://localhost:$FRONTEND_PORT"
+    else
+        echo "❌ Frontend package.json not found."
     fi
-    cd "$frontend_dir"
-    nohup npm start > "$PROJECT_DIR/.frontend.log" 2>&1 &
-    echo $! > "$FRONTEND_PID_FILE"
-    echo "✅ Frontend started (PID: $!)"
 }
 
-start_servers() {
-    echo "🚀 Starting all servers..."
+start_server() {
     start_backend
+    sleep 1
     start_frontend
-    sleep 3
-    show_status
+    sleep 2
+    echo ""
+    echo "🌐 Access:"
+    echo "  Frontend : http://localhost:${FRONTEND_PORT:-3000}"
+    echo "  Backend  : http://localhost:${BACKEND_PORT:-5000}/api"
 }
 
-stop_servers() {
+stop_server() {
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+    BACKEND_PORT="${BACKEND_PORT:-5000}"; FRONTEND_PORT="${FRONTEND_PORT:-3000}"
     echo "⏸  Stopping servers..."
-    if [ -f "$BACKEND_PID_FILE" ]; then
-        kill "$(cat "$BACKEND_PID_FILE")" 2>/dev/null
-        rm -f "$BACKEND_PID_FILE"
-        echo "✅ Backend stopped"
-    fi
-    if [ -f "$FRONTEND_PID_FILE" ]; then
-        kill "$(cat "$FRONTEND_PID_FILE")" 2>/dev/null
-        rm -f "$FRONTEND_PID_FILE"
-        echo "✅ Frontend stopped"
-    fi
-    pkill -f "node.*server.js" 2>/dev/null
-    pkill -f "react-scripts start" 2>/dev/null
+    [ -f "$BACKEND_PID_FILE" ] && kill "$(cat "$BACKEND_PID_FILE")" 2>/dev/null && rm -f "$BACKEND_PID_FILE" && echo "  ✅ Backend stopped"
+    [ -f "$FRONTEND_PID_FILE" ] && kill "$(cat "$FRONTEND_PID_FILE")" 2>/dev/null && rm -f "$FRONTEND_PID_FILE" && echo "  ✅ Frontend stopped"
+    fuser -k "${BACKEND_PORT}/tcp" 2>/dev/null; fuser -k "${FRONTEND_PORT}/tcp" 2>/dev/null
     echo "✅ All servers stopped"
 }
 
 show_status() {
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+    BACKEND_PORT="${BACKEND_PORT:-5000}"; FRONTEND_PORT="${FRONTEND_PORT:-3000}"
     echo ""
     echo "📊 Server Status - E-Commerce Full-Stack"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    # Backend
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     if [ -f "$BACKEND_PID_FILE" ] && kill -0 "$(cat "$BACKEND_PID_FILE")" 2>/dev/null; then
-        echo "  Backend  : ✅ Running (PID: $(cat "$BACKEND_PID_FILE")) → http://localhost:$BACKEND_PORT"
+        echo "  Backend  : ✅ Running (PID: $(cat "$BACKEND_PID_FILE")) → port $BACKEND_PORT"
     else
-        echo "  Backend  : ❌ Not running"
+        echo "  Backend  : ❌ Not running (port $BACKEND_PORT)"
     fi
-    # Frontend
     if [ -f "$FRONTEND_PID_FILE" ] && kill -0 "$(cat "$FRONTEND_PID_FILE")" 2>/dev/null; then
-        echo "  Frontend : ✅ Running (PID: $(cat "$FRONTEND_PID_FILE")) → http://localhost:$FRONTEND_PORT"
+        echo "  Frontend : ✅ Running (PID: $(cat "$FRONTEND_PID_FILE")) → port $FRONTEND_PORT"
     else
-        echo "  Frontend : ❌ Not running"
-    fi
-    # Databases (Docker)
-    if command -v docker &>/dev/null; then
-        local pg_status
-        pg_status=$(docker inspect -f '{{.State.Status}}' ecommerce-postgres 2>/dev/null || echo "not found")
-        local redis_status
-        redis_status=$(docker inspect -f '{{.State.Status}}' ecommerce-redis 2>/dev/null || echo "not found")
-        echo "  PostgreSQL: $([ "$pg_status" = "running" ] && echo "✅ Running (port 5432)" || echo "❌ $pg_status")"
-        echo "  Redis     : $([ "$redis_status" = "running" ] && echo "✅ Running (port 6379)" || echo "❌ $redis_status")"
+        echo "  Frontend : ❌ Not running (port $FRONTEND_PORT)"
     fi
     echo ""
     echo "🌐 Access:"
     echo "  Frontend : http://localhost:$FRONTEND_PORT"
-    echo "  API      : http://localhost:$BACKEND_PORT/api"
-    echo "  Admin    : http://localhost:$FRONTEND_PORT/admin"
+    echo "  Backend  : http://localhost:$BACKEND_PORT/api"
     echo ""
 }
 
-view_backend_logs() {
-    echo "📝 Backend Logs (last 30 lines):"
+edit_ports() {
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+    BACKEND_PORT="${BACKEND_PORT:-5000}"; FRONTEND_PORT="${FRONTEND_PORT:-3000}"
+
+    echo ""
+    echo "⚙️  Edit Ports - E-Commerce"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    if [ -f "$PROJECT_DIR/.backend.log" ]; then
-        tail -30 "$PROJECT_DIR/.backend.log"
-    else
-        echo "No backend logs found."
-    fi
+    echo "Press Enter to keep the current value shown in [brackets]."
+    echo ""
+
+    read -r -p "  Backend  BACKEND_PORT  [$BACKEND_PORT]: " input; BACKEND_PORT="${input:-$BACKEND_PORT}"
+    read -r -p "  Frontend FRONTEND_PORT [$FRONTEND_PORT]: " input; FRONTEND_PORT="${input:-$FRONTEND_PORT}"
+
+    cat > "$ENV_FILE" <<EOF
+# E-Commerce - Port Configuration
+BACKEND_PORT=$BACKEND_PORT
+FRONTEND_PORT=$FRONTEND_PORT
+EOF
+    echo ""
+    echo "✅ Ports saved to .env"
+    echo "   BACKEND_PORT=$BACKEND_PORT  FRONTEND_PORT=$FRONTEND_PORT"
     echo ""
 }
 
-view_frontend_logs() {
-    echo "🌐 Frontend Logs (last 30 lines):"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    if [ -f "$PROJECT_DIR/.frontend.log" ]; then
-        tail -30 "$PROJECT_DIR/.frontend.log"
-    else
-        echo "No frontend logs found."
-    fi
+install_build_start() {
+    echo "📦 Installing dependencies..."
+    for dir in "$PROJECT_DIR" "$PROJECT_DIR/backend" "$PROJECT_DIR/frontend"; do
+        [ -f "$dir/package.json" ] && echo "  → $(basename "$dir")..." && cd "$dir" && npm install
+    done
+    echo "✅ Dependencies installed"
+    echo "🏗️  Building frontend..."
+    [ -d "$PROJECT_DIR/frontend" ] && cd "$PROJECT_DIR/frontend" && npm run build 2>/dev/null || true
+    echo "✅ Build complete"
     echo ""
-}
-
-run_migrations() {
-    echo "🗄️  Running database migrations..."
-    if [ -f "$PROJECT_DIR/backend/package.json" ] && grep -q '"migrate"' "$PROJECT_DIR/backend/package.json"; then
-        cd "$PROJECT_DIR/backend" && npm run migrate
-    elif [ -f "$PROJECT_DIR/package.json" ] && grep -q '"migrate"' "$PROJECT_DIR/package.json"; then
-        cd "$PROJECT_DIR" && npm run migrate
-    else
-        echo "⚠️  No migration script found in package.json."
-        echo "   Add a 'migrate' script to your package.json."
-    fi
-}
-
-run_tests() {
-    echo "🧪 Running tests..."
-    if [ -f "$PROJECT_DIR/backend/package.json" ] && grep -q '"test"' "$PROJECT_DIR/backend/package.json"; then
-        cd "$PROJECT_DIR/backend" && npm test
-    elif [ -f "$PROJECT_DIR/package.json" ] && grep -q '"test"' "$PROJECT_DIR/package.json"; then
-        cd "$PROJECT_DIR" && npm test
-    else
-        echo "⚠️  No test script found in package.json."
-    fi
-}
-
-restart_servers() {
-    echo "🔄 Restarting all servers..."
-    stop_servers
-    sleep 2
-    start_servers
+    start_server
 }
 
 while true; do
     show_menu
     read -r -p "Choose an option: " choice
-
     case $choice in
-        1)  install_deps ;;
-        2)  start_servers ;;
-        3)  stop_servers ;;
-        4)  restart_servers ;;
-        5)  show_status ;;
-        6)  start_databases ;;
-        7)  stop_databases ;;
-        8)  view_backend_logs ;;
-        9)  view_frontend_logs ;;
-        10) run_migrations ;;
-        11) run_tests ;;
-        0)
-            echo "👋 Goodbye!"
-            exit 0
-            ;;
-        *)
-            echo "❌ Invalid option. Please try again."
-            ;;
+        1) start_server ;; 2) stop_server ;; 3) show_status ;; 4) edit_ports ;; 5) install_build_start ;;
+        0) echo "👋 Goodbye!"; exit 0 ;;
+        *) echo "❌ Invalid option. Please try again." ;;
     esac
 done

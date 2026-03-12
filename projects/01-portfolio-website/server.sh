@@ -5,7 +5,14 @@
 # Served with Python http.server or Node.js serve
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PORT=8080
+ENV_FILE="$PROJECT_DIR/.env"
+
+# Load .env if it exists
+[ -f "$ENV_FILE" ] && source "$ENV_FILE"
+
+# Port defaults (override via .env)
+PORT="${PORT:-8080}"
+
 SERVER_PID_FILE="$PROJECT_DIR/.server.pid"
 
 show_menu() {
@@ -15,18 +22,20 @@ show_menu() {
     echo "║   Stack: HTML5 + CSS3 + JavaScript (Static)     ║"
     echo "╚══════════════════════════════════════════════════╝"
     echo ""
-    echo "1. Start Server"
-    echo "2. Stop Server"
+    echo "1. Start"
+    echo "2. Stop"
     echo "3. Status"
-    echo "4. View Logs"
-    echo "5. Restart Server"
-    echo "6. Open in Browser"
-    echo "7. Build / Validate HTML"
+    echo "4. Edit Ports (.env)"
+    echo "5. Install, Build & Start"
     echo "0. Exit"
     echo ""
 }
 
 start_server() {
+    # Reload env to pick up any port changes
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+    PORT="${PORT:-8080}"
+
     if [ -f "$SERVER_PID_FILE" ] && kill -0 "$(cat "$SERVER_PID_FILE")" 2>/dev/null; then
         echo "⚠️  Server is already running (PID: $(cat "$SERVER_PID_FILE"))"
         return
@@ -62,14 +71,14 @@ stop_server() {
         rm -f "$SERVER_PID_FILE"
         echo "✅ Server stopped"
     else
-        pkill -f "python.*http.server" 2>/dev/null
-        pkill -f "python.*SimpleHTTPServer" 2>/dev/null
-        pkill -f "npx serve" 2>/dev/null
+        fuser -k "${PORT}/tcp" 2>/dev/null
         echo "✅ Server stopped"
     fi
 }
 
 show_status() {
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+    PORT="${PORT:-8080}"
     echo ""
     echo "📊 Server Status - Portfolio Website"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -91,52 +100,41 @@ show_status() {
     echo ""
 }
 
-view_logs() {
-    echo "📝 Server Logs (last 30 lines):"
+edit_ports() {
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+    PORT="${PORT:-8080}"
+
+    echo ""
+    echo "⚙️  Edit Ports - Portfolio Website"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    if [ -f "$PROJECT_DIR/.server.log" ]; then
-        tail -30 "$PROJECT_DIR/.server.log"
-    else
-        echo "No logs found."
-    fi
+    echo "Press Enter to keep the current value shown in [brackets]."
+    echo ""
+
+    read -r -p "  Static Server PORT [$PORT]: " input_port
+    PORT="${input_port:-$PORT}"
+
+    # Write .env
+    cat > "$ENV_FILE" <<EOF
+# Portfolio Website - Port Configuration
+PORT=$PORT
+EOF
+    echo ""
+    echo "✅ Ports saved to .env"
+    echo "   PORT=$PORT"
     echo ""
 }
 
-open_browser() {
-    echo "🌐 Opening http://localhost:$PORT in browser..."
-    if command -v xdg-open &>/dev/null; then
-        xdg-open "http://localhost:$PORT"
-    elif command -v open &>/dev/null; then
-        open "http://localhost:$PORT"
+install_build_start() {
+    echo "📦 Installing dependencies..."
+    if [ -f "$PROJECT_DIR/package.json" ]; then
+        cd "$PROJECT_DIR" && npm install
+        echo "✅ Dependencies installed"
+        echo "🏗️  Building..."
+        npm run build 2>/dev/null || echo "ℹ️  No build step needed for static site."
     else
-        echo "Please open http://localhost:$PORT manually in your browser."
+        echo "ℹ️  No package.json — static site, no dependencies needed."
     fi
-}
-
-validate_html() {
-    echo "🔍 Validating project files..."
-    local errors=0
-    for f in index.html style.css script.js; do
-        if [ -f "$PROJECT_DIR/$f" ]; then
-            echo "  ✅ Found: $f ($(wc -l < "$PROJECT_DIR/$f") lines)"
-        else
-            echo "  ❌ Missing: $f"
-            errors=$((errors + 1))
-        fi
-    done
-    if [ $errors -eq 0 ]; then
-        echo ""
-        echo "✅ All required files present. Ready to serve!"
-    else
-        echo ""
-        echo "⚠️  $errors file(s) missing. Create them before starting the server."
-    fi
-}
-
-restart_server() {
-    echo "🔄 Restarting server..."
-    stop_server
-    sleep 1
+    echo ""
     start_server
 }
 
@@ -148,10 +146,8 @@ while true; do
         1) start_server ;;
         2) stop_server ;;
         3) show_status ;;
-        4) view_logs ;;
-        5) restart_server ;;
-        6) open_browser ;;
-        7) validate_html ;;
+        4) edit_ports ;;
+        5) install_build_start ;;
         0)
             echo "👋 Goodbye!"
             exit 0

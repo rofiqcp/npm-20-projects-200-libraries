@@ -17,3 +17,19 @@ yarn-error.log*
 coverage/
 .cache/
 .playwright-mcp/
+# Server runtime files
+*.pid
+.server.pid
+.backend.pid
+.frontend.pid
+.ml-service.pid
+.api-gateway.pid
+.user-service.pid
+.product-service.pid
+.order-service.pid
+.payment-service.pid
+.notification-service.pid
+.server.log
+.backend.log
+.frontend.log
+.ml-service.log
