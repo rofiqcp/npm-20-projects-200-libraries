@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-[#0a0a0f] text-gray-100 antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-[#12121a];
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-[#2e2e47] rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-[#4c4c6e];
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-[#12121a] border border-[#2e2e47] rounded-2xl p-5;
+  }
+  .btn-primary {
+    @apply bg-violet-600 hover:bg-violet-500 text-white font-medium py-2.5 px-5 rounded-xl
+           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+           active:scale-95;
+  }
+  .btn-secondary {
+    @apply bg-[#242436] hover:bg-[#2e2e47] text-gray-200 font-medium py-2.5 px-5 rounded-xl
+           transition-all duration-200 border border-[#3a3a5c] active:scale-95;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .confidence-bar {
+    @apply h-1.5 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500;
+  }
+  .tag {
+    @apply px-2 py-0.5 rounded-md text-xs font-semibold;
+  }
+}
+
+/* Bounding box canvas overlay */
+canvas.detection-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* Loading shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #1a1a27 25%, #242436 50%, #1a1a27 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Drop zone active state */
+.drop-active {
+  @apply border-violet-500 bg-violet-950/30;
+}
