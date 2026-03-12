@@ -1,0 +1,14 @@
+{
+  "name": "iot-dashboard",
+  "version": "1.0.0",
+  "description": "IoT Weather Dashboard with real-time updates via Socket.IO",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "server": "npm start --prefix backend",
+    "client": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
