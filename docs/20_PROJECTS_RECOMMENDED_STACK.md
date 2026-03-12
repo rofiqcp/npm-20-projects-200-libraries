@@ -1189,261 +1189,285 @@ services:
 
 ---
 
-## Project 18: Real-Time Analytics Dashboard
+## Project 18: Smart Manufacturing System (Industry 4.0)
 **Durasi:** 4-5 minggu | **Complexity:** ⭐⭐⭐⭐⭐⭐
 
 ### Tech Stack
 ```
-Frontend: React + D3.js + Recharts
-Backend: NestJS
-Primary Database: PostgreSQL (warehouse)
-Time-Series: InfluxDB atau TimescaleDB extension
-Real-time: Kafka + Socket.IO
-Caching: Redis
-Visualization: D3.js, Echarts, WebGL
-Data Processing: Node streams
+Frontend: React + Three.js (3D visualization)
+Backend: NestJS (scalable microservices)
+Database Utama: PostgreSQL (production orders, equipment)
+Time-Series DB: InfluxDB (sensor/machine metrics)
+Real-time: Socket.IO + MQTT (equipment monitoring)
+Caching: Redis (production state)
+Message Queue: RabbitMQ (order processing)
+IoT Protocol: MQTT (machine communication)
+Visualization: Grafana + Echarts
+Authentication: JWT + OAuth
 ```
 
 ### Libraries
 ```javascript
 // Backend
-npm install @nestjs/common pg influxdb-client kafka-node socket.io
+npm install @nestjs/core @nestjs/typeorm typeorm pg influxdb-client mqtt.js amqplib socket.io redis
 
 // Frontend
-npm install react d3 recharts echarts socket.io-client
-
-// Data processing
-npm install kafka-node stream bull
+npm install react three echarts socket.io-client recharts
 ```
 
 ### Database Architecture
 ```javascript
-// PostgreSQL - Main analytics warehouse
-const { Client } = require('pg');
-const client = new Client({...});
+// PostgreSQL - Production planning & equipment inventory
+const typeorm = require('typeorm');
 
-await client.query(`
-  CREATE TABLE events (
+await connection.query(`
+  CREATE TABLE production_orders (
     id SERIAL PRIMARY KEY,
-    event_type VARCHAR(50),
-    user_id INTEGER,
-    session_id VARCHAR(100),
-    data JSONB,
-    timestamp TIMESTAMP,
-    source VARCHAR(50)
+    product_id INTEGER,
+    quantity INTEGER,
+    status VARCHAR(50), -- 'scheduled', 'running', 'completed'
+    scheduled_start TIMESTAMP,
+    scheduled_end TIMESTAMP,
+    quality_score DECIMAL(3,2),
+    created_at TIMESTAMP DEFAULT NOW()
   );
   
-  CREATE TABLE aggregations (
+  CREATE TABLE equipment (
     id SERIAL PRIMARY KEY,
-    metric_name VARCHAR(100),
-    value INTEGER,
-    period VARCHAR(20),
-    aggregated_at TIMESTAMP
+    name VARCHAR(255),
+    location VARCHAR(100),
+    status VARCHAR(50), -- 'idle', 'running', 'maintenance'
+    capacity INTEGER,
+    maintenance_due TIMESTAMP,
+    efficiency_score DECIMAL(3,2)
   );
   
-  CREATE INDEX idx_event_timestamp ON events(timestamp);
-  CREATE INDEX idx_metric_period ON aggregations(metric_name, period);
+  CREATE TABLE worker_assignments (
+    id SERIAL PRIMARY KEY,
+    worker_id INTEGER,
+    equipment_id INTEGER,
+    shift_start TIMESTAMP,
+    shift_end TIMESTAMP
+  );
 `);
 
-// TimescaleDB for time-series optimization (PostgreSQL extension)
-// Or InfluxDB for better time-series performance
+// InfluxDB - Real-time machine metrics (time-series)
+const { InfluxDB, Point } = require('@influxdata/influxdb-client');
+const influxDB = new InfluxDB({url: 'http://localhost:8086'});
+// Store: temperature, vibration, power_consumption, cycle_time per equipment
+
+// Redis - Production state & real-time cache
+const redis = require('redis');
+const redisClient = redis.createClient();
+// Cache: current_production_status, equipment_status, worker_locations
 ```
 
 ### Features
-- ✅ Real-time KPI dashboard
-- ✅ Multi-source data ingestion
-- ✅ Custom metric creation
-- ✅ Drill-down analytics
-- ✅ Scheduled reports
-- ✅ Alert system
-- ✅ Heatmaps & advanced viz
-- ✅ Data export
+- ✅ Real-time equipment monitoring (temperature, vibration, power)
+- ✅ Production scheduling & order management
+- ✅ Quality control tracking
+- ✅ Maintenance scheduling optimization
+- ✅ Worker shift management
+- ✅ 3D factory floor visualization
+- ✅ Performance dashboards (OEE - Overall Equipment Effectiveness)
+- ✅ Predictive maintenance alerts
+- ✅ Production analytics & reporting
+
+### Why This Stack?
+**PostgreSQL** untuk relational production data, **InfluxDB** untuk optimized time-series metrics, **RabbitMQ** untuk order queue processing, **Redis** untuk real-time state cache
 
 ---
 
-## Project 19: Real-Time Collaborative Code Editor (VS Code Online)
-**Durasi:** 5-6 minggu | **Complexity:** ⭐⭐⭐⭐⭐⭐
+## Project 19: Supply Chain & Logistics Management
+**Durasi:** 4-5 minggu | **Complexity:** ⭐⭐⭐⭐⭐
 
 ### Tech Stack
 ```
-Frontend: React + Monaco Editor
-Backend: Express.js + Socket.IO
-Database: PostgreSQL (files + history)
-Real-time Sync: Operational Transformation
-Code Execution: Docker sandboxes
-Terminal: Xterm.js
+Frontend: React + Mapbox (geolocation)
+Backend: NestJS + GraphQL
+Database Utama: PostgreSQL (relational core)
+Search Engine: Elasticsearch (shipment search)
+Caching: Redis (tracking state)
+Real-time: Socket.IO (GPS updates)
+Maps API: Mapbox/Google Maps
+Message Queue: RabbitMQ (shipment events)
+Geospatial: PostGIS extension for PostgreSQL
 Authentication: JWT
-Collaboration: Presence awareness
 ```
 
 ### Libraries
 ```javascript
 // Backend
-npm install express socket.io pg dotenv
+npm install @nestjs/core @nestjs/graphql graphql-tools pg elasticsearch redis mapbox socket.io
 
 // Frontend
-npm install react monaco-editor socket.io-client xterm tailwindcss
-
-// Collaboration
-npm install ot.js yjs
-
-// Code execution
-npm install docker-sdk
+npm install react mapbox-gl apollo-client recharts react-router-dom
 ```
 
-### Database Setup
+### Database Architecture
 ```javascript
-// PostgreSQL - Project + file storage
+// PostgreSQL + PostGIS - Geographic data & relationships
 const { Client } = require('pg');
 const client = new Client({...});
 
 await client.query(`
-  CREATE TABLE projects (
+  CREATE EXTENSION IF NOT EXISTS postgis;
+  
+  CREATE TABLE shipments (
     id SERIAL PRIMARY KEY,
-    owner_id INTEGER,
+    order_id INTEGER,
+    origin_location GEOGRAPHY(POINT),
+    destination_location GEOGRAPHY(POINT),
+    current_location GEOGRAPHY(POINT),
+    status VARCHAR(50), -- 'pending', 'in_transit', 'delivered'
+    estimated_arrival TIMESTAMP,
+    actual_arrival TIMESTAMP,
+    carrier_id INTEGER,
+    vehicle_id INTEGER,
+    created_at TIMESTAMP DEFAULT NOW()
+  );
+  
+  CREATE TABLE warehouses (
+    id SERIAL PRIMARY KEY,
+    location GEOGRAPHY(POINT),
     name VARCHAR(255),
-    created_at TIMESTAMP
+    capacity INTEGER,
+    current_stock INTEGER,
+    region VARCHAR(100)
   );
   
-  CREATE TABLE files (
-    id SERIAL PRIMARY KEY,
-    project_id INTEGER REFERENCES projects(id),
-    filename VARCHAR(255),
-    content TEXT,
-    language VARCHAR(50),
-    last_modified TIMESTAMP
-  );
-  
-  CREATE TABLE collaborators (
-    id SERIAL PRIMARY KEY,
-    project_id INTEGER,
-    user_id INTEGER,
-    permission VARCHAR(20), -- 'view', 'edit'
-    joined_at TIMESTAMP
-  );
-  
-  CREATE TABLE edit_history (
-    id SERIAL PRIMARY KEY,
-    file_id INTEGER REFERENCES files(id),
-    user_id INTEGER,
-    change TEXT,
-    timestamp TIMESTAMP
-  );
+  CREATE INDEX idx_shipment_location ON shipments USING GIST(current_location);
+  CREATE INDEX idx_shipment_status ON shipments(status);
+  CREATE INDEX idx_warehouse_location ON warehouses USING GIST(location);
 `);
+
+// Elasticsearch - Full-text search shipments
+const { Client: ElasticClient } = require('@elastic/elasticsearch');
+const elasticClient = new ElasticClient({node: 'http://localhost:9200'});
+
+// Redis - Real-time shipment tracking state
+const redis = require('redis');
+const redisClient = redis.createClient();
+// Cache: tracking updates, ETA predictions, vehicle availability
 ```
 
 ### Features
-- ✅ Real-time collaborative editing
-- ✅ Multiple cursors
-- ✅ Syntax highlighting (100+ languages)
-- ✅ Built-in terminal
-- ✅ Code execution (Node.js, Python, Java, dll)
-- ✅ File tree explorer
-- ✅ Chat/comments
-- ✅ Version control
-- ✅ Presence awareness
+- ✅ Real-time GPS shipment tracking
+- ✅ Multi-warehouse inventory management
+- ✅ Route optimization algorithms
+- ✅ Vehicle & carrier management
+- ✅ Geospatial queries (nearest warehouse, optimal route)
+- ✅ Delivery schedule management
+- ✅ Customer notifications (SMS/Email)
+- ✅ Analytics (delivery cost, time optimization)
+- ✅ Carrier API integration
+
+### Why This Stack?
+**PostgreSQL + PostGIS** untuk geospatial queries, **Elasticsearch** untuk fast shipment search, **Socket.IO** untuk real-time GPS tracking updates
 
 ---
 
-## Project 20: Machine Learning Model Training Platform
-**Durasi:** 6-8 minggu | **Complexity:** ⭐⭐⭐⭐⭐⭐⭐
+## Project 20: Energy & Resource Management System (Flexible Industry)
+**Durasi:** 4-5 minggu | **Complexity:** ⭐⭐⭐⭐⭐
 
 ### Tech Stack
 ```
-Frontend: React + TensorFlow.js Visualizer
-Backend: NestJS
-Database: PostgreSQL (metadata)
-ML Framework: TensorFlow + PyTorch (Python)
-Model Tracking: MLflow
-Model Storage: MinIO (S3-compatible)
-Task Queue: Bull or Celery
-Compute: Docker containers
-Monitoring: Prometheus + Grafana
+Frontend: React + D3.js (advanced analytics)
+Backend: Express.js + Python (ML predictions)
+Database Utama: PostgreSQL (consumption records)
+Time-Series: TimescaleDB extension (on PostgreSQL)
+Data Lake: MongoDB (raw sensor data)
+Machine Learning: Python scikit-learn
+Caching: Redis (analytics cache)
+Real-time: Socket.IO (live monitoring)
+IoT Sensors: MQTT protocol
+Monitoring: Grafana dashboards
 ```
 
 ### Libraries
 ```javascript
-// Backend
-npm install @nestjs/common pg mlflow python docker-sdk bull
+// Backend (Node.js)
+npm install express pg mqtt.js socket.io redis
+
+// Backend Alternative (Python for ML)
+pip install pandas scikit-learn tensorflow flask
 
 // Frontend
-npm install react @tensorflow/tfjs-vis plotly.js tailwindcss
-
-// ML (Python)
-pip install tensorflow pytorch mlflow fastapi
+npm install react d3 echarts socket.io-client recharts
 ```
 
-### Architecture
-```
-┌─────────────────────────────────────┐
-│ Frontend - Model Management UI      │
-└─────────────────────────────────────┘
-              ↓
-┌─────────────────────────────────────┐
-│ NestJS Backend API                  │
-└─────────────────────────────────────┘
-        ↓          ↓           ↓
-    ┌────────┬─────────┬──────────┐
-    ↓        ↓         ↓          ↓
-  PostgreSQL MLflow   MinIO     Bull Queue
-    (DB)   (tracking)(storage) (tasks)
-    
-    ↓ Task Distribution
-┌─────────────────────────────────────┐
-│ Python Workers (Training Jobs)      │
-├─────────────────────────────────────┤
-│ TensorFlow/PyTorch instances        │
-└─────────────────────────────────────┘
-```
-
-### Database Setup
+### Database Architecture
 ```javascript
-// PostgreSQL - Model metadata & experiments
+// PostgreSQL + TimescaleDB - Optimized time-series energy data
 const { Client } = require('pg');
 const client = new Client({...});
 
 await client.query(`
-  CREATE TABLE models (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    framework VARCHAR(50), -- 'tensorflow', 'pytorch'
-    version VARCHAR(50),
-    description TEXT,
-    created_at TIMESTAMP
+  CREATE EXTENSION IF NOT EXISTS timescaledb;
+  
+  CREATE TABLE energy_consumption (
+    time TIMESTAMP NOT NULL,
+    sensor_id INTEGER NOT NULL,
+    building_id INTEGER NOT NULL,
+    consumption_kw DECIMAL(10, 2),
+    cost_usd DECIMAL(10, 2),
+    source VARCHAR(50), -- 'grid', 'solar', 'battery'
+    created_at TIMESTAMP DEFAULT NOW()
   );
   
-  CREATE TABLE experiments (
-    id SERIAL PRIMARY KEY,
-    model_id INTEGER REFERENCES models(id),
-    name VARCHAR(255),
-    hyperparameters JSONB,
-    status VARCHAR(20), -- 'running', 'completed', 'failed'
-    accuracy FLOAT,
-    training_time INTEGER,
-    created_at TIMESTAMP
+  SELECT create_hypertable('energy_consumption', 'time', if_not_exists => TRUE);
+  CREATE INDEX idx_building_time ON energy_consumption (building_id, time DESC);
+  
+  CREATE TABLE renewable_generation (
+    time TIMESTAMP NOT NULL,
+    source_id INTEGER NOT NULL,
+    generation_kw DECIMAL(10, 2),
+    generation_type VARCHAR(50), -- 'solar', 'wind', 'hydro'
+    efficiency_percent DECIMAL(3,2)
   );
   
-  CREATE TABLE datasets (
+  SELECT create_hypertable('renewable_generation', 'time', if_not_exists => TRUE);
+  
+  CREATE TABLE equipment (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
-    size_mb INTEGER,
-    s3_path VARCHAR(255),
-    train_split FLOAT,
-    test_split FLOAT
+    building_id INTEGER,
+    equipment_type VARCHAR(50),
+    power_rating_kw DECIMAL(10,2),
+    status VARCHAR(20),
+    efficiency_score DECIMAL(3,2)
   );
 `);
+
+// MongoDB - Raw sensor data lake (flexible schema)
+const mongoose = require('mongoose');
+const rawSensorSchema = mongoose.Schema({
+  sensor_id: String,
+  raw_data: Object,
+  timestamp: Date,
+  metadata: { anything: 'can go here' }
+});
+
+// Redis - Real-time aggregates & predictions
+const redis = require('redis');
+const redisClient = redis.createClient();
+// Cache: current consumption, peak prediction, cost estimation
 ```
 
 ### Features
-- ✅ Model training pipeline
-- ✅ Hyperparameter tuning
-- ✅ Version control (MLflow)
-- ✅ Performance metrics tracking
-- ✅ Model deployment
-- ✅ A/B testing
-- ✅ Monitoring & alerts
-- ✅ Automated retraining
-- ✅ Model comparison
+- ✅ Real-time energy consumption monitoring
+- ✅ Multi-building management
+- ✅ Renewable energy integration (solar, wind)
+- ✅ Cost tracking & billing
+- ✅ ML-based consumption forecasting
+- ✅ Smart alerts (overconsumption, anomalies)
+- ✅ Sustainability reporting
+- ✅ Equipment efficiency analysis
+- ✅ Demand-response automation
+- ✅ Historical analytics & trend analysis
+
+### Why This Stack?
+**PostgreSQL + TimescaleDB** untuk optimized time-series queries, **MongoDB** untuk flexible raw data storage, **Python** untuk ML predictions, **React + D3** untuk complex analytics visualization
 
 ---
 
@@ -1467,9 +1491,9 @@ await client.query(`
 | 15 | Advanced | PostgreSQL + Redis | ⭐⭐⭐⭐⭐ | E-commerce complexity |
 | 16 | Advanced | MongoDB + Cassandra + Redis | ⭐⭐⭐⭐⭐⭐ | 3 specialized databases |
 | 17 | Advanced | Multi-DB Microservices | ⭐⭐⭐⭐⭐⭐ | Each service optimized |
-| 18 | Advanced | PostgreSQL + InfluxDB | ⭐⭐⭐⭐⭐⭐ | Analytics warehouse |
-| 19 | Advanced | PostgreSQL | ⭐⭐⭐⭐⭐⭐ | Collaboration + versioning |
-| 20 | Advanced | PostgreSQL + MLflow | ⭐⭐⭐⭐⭐⭐⭐ | ML model tracking |
+| 18 | Advanced | PostgreSQL + InfluxDB | ⭐⭐⭐⭐⭐⭐ | **Industry 4.0 Manufacturing** |
+| 19 | Advanced | PostgreSQL + Elasticsearch | ⭐⭐⭐⭐⭐⭐ | **Supply Chain Logistics** |
+| 20 | Advanced | PostgreSQL + MongoDB | ⭐⭐⭐⭐⭐⭐ | **Energy Management (Flexible Industry)** |
 
 ---
 
