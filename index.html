@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RofiqCP — IoT Solutions & Innovation</title>
+  <meta name="description" content="RofiqCP — Platform inovasi IoT terdepan. Solusi cerdas untuk rumah, industri, dan masa depan yang terhubung." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated Background -->
+  <div class="bg-grid"></div>
+  <div class="particles" id="particles"></div>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="8" stroke="url(#g1)" stroke-width="2"/>
+            <circle cx="20" cy="20" r="3" fill="url(#g1)"/>
+            <path d="M20 4 L20 12" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M20 28 L20 36" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M4 20 L12 20" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M28 20 L36 20" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8.69 8.69 L14.34 14.34" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M25.66 25.66 L31.31 31.31" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M31.31 8.69 L25.66 14.34" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M14.34 25.66 L8.69 31.31" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6366f1"/>
+                <stop offset="1" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="logo-text">Rofiq<span class="logo-accent">CP</span></span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Beranda</a></li>
+        <li><a href="#about" class="nav-link">Tentang</a></li>
+        <li><a href="#services" class="nav-link">Layanan</a></li>
+        <li><a href="#projects" class="nav-link">Proyek</a></li>
+        <li><a href="#contact" class="nav-link">Kontak</a></li>
+      </ul>
+      <a href="#contact" class="btn-nav" id="cta-nav">Hubungi Kami</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="badge-pill" data-aos="fade-down">
+        <span class="badge-dot"></span>
+        IoT Innovation Platform
+      </div>
+      <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">
+        Menghubungkan Dunia<br/>dengan <span class="gradient-text">Internet of Things</span>
+      </h1>
+      <p class="hero-desc" data-aos="fade-up" data-aos-delay="200">
+        Solusi IoT terdepan untuk rumah cerdas, industri 4.0, dan infrastruktur masa depan. Kami menghadirkan konektivitas tanpa batas dengan teknologi terkini.
+      </p>
+      <div class="hero-cta" data-aos="fade-up" data-aos-delay="300">
+        <a href="#services" class="btn-primary" id="btn-explore">
+          <span>Jelajahi Layanan</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <a href="#projects" class="btn-ghost" id="btn-projects">Lihat Proyek</a>
+      </div>
+      <div class="hero-stats" data-aos="fade-up" data-aos-delay="400">
+        <div class="stat-item">
+          <span class="stat-number" data-target="150">0</span><span class="stat-unit">+</span>
+          <span class="stat-label">Perangkat Terhubung</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="50">0</span><span class="stat-unit">+</span>
+          <span class="stat-label">Proyek Selesai</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="99">0</span><span class="stat-unit">%</span>
+          <span class="stat-label">Uptime Sistem</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="iot-network" id="iotNetwork">
+        <div class="hub-center">
+          <div class="hub-ring hub-ring-1"></div>
+          <div class="hub-ring hub-ring-2"></div>
+          <div class="hub-ring hub-ring-3"></div>
+          <div class="hub-icon">
+            <svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="20" stroke="url(#hg)" stroke-width="2"/><circle cx="30" cy="30" r="8" fill="url(#hg)" opacity="0.8"/><path d="M30 10 L30 20" stroke="url(#hg)" stroke-width="2"/><path d="M30 40 L30 50" stroke="url(#hg)" stroke-width="2"/><path d="M10 30 L20 30" stroke="url(#hg)" stroke-width="2"/><path d="M40 30 L50 30" stroke="url(#hg)" stroke-width="2"/><defs><linearGradient id="hg" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs></svg>
+          </div>
+        </div>
+        <div class="iot-node node-1" id="node1"><div class="node-icon">📡</div><span>Sensor</span></div>
+        <div class="iot-node node-2" id="node2"><div class="node-icon">🌡️</div><span>Suhu</span></div>
+        <div class="iot-node node-3" id="node3"><div class="node-icon">💡</div><span>Smart Light</span></div>
+        <div class="iot-node node-4" id="node4"><div class="node-icon">🔒</div><span>Keamanan</span></div>
+        <div class="iot-node node-5" id="node5"><div class="node-icon">⚡</div><span>Energi</span></div>
+        <div class="iot-node node-6" id="node6"><div class="node-icon">🌐</div><span>Gateway</span></div>
+        <svg class="connection-lines" id="connLines"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-tag" data-aos="fade-up">Tentang Kami</div>
+      <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">
+        Pionir Teknologi IoT<br/>di Indonesia
+      </h2>
+      <div class="about-grid">
+        <div class="about-card glass-card" data-aos="fade-right">
+          <div class="about-icon">🛰️</div>
+          <h3>Misi Kami</h3>
+          <p>Menghadirkan solusi IoT yang terjangkau, andal, dan inovatif untuk setiap segmen — dari rumah tangga hingga industri besar.</p>
+        </div>
+        <div class="about-card glass-card" data-aos="fade-up">
+          <div class="about-icon">🔬</div>
+          <h3>Teknologi</h3>
+          <p>Menggunakan protokol MQTT, LoRaWAN, WiFi 6, dan edge computing untuk memastikan konektivitas yang cepat dan aman.</p>
+        </div>
+        <div class="about-card glass-card" data-aos="fade-left">
+          <div class="about-icon">🏆</div>
+          <h3>Pengalaman</h3>
+          <p>Didukung tim berpengalaman dengan keahlian embedded systems, cloud computing, dan machine learning untuk IoT.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-tag" data-aos="fade-up">Layanan</div>
+      <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">
+        Solusi Lengkap untuk<br/>Ekosistem IoT Anda
+      </h2>
+      <div class="services-grid">
+        <div class="service-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="service-icon-wrap" style="--clr: #6366f1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          </div>
+          <h3>Smart Home</h3>
+          <p>Otomatisasi rumah cerdas — kontrol pencahayaan, AC, keamanan, dan energi dari mana saja.</p>
+          <ul class="service-features">
+            <li>Kontrol via smartphone</li>
+            <li>Otomasi berbasis jadwal</li>
+            <li>Integrasi voice assistant</li>
+          </ul>
+        </div>
+        <div class="service-card featured" data-aos="fade-up" data-aos-delay="100">
+          <div class="featured-badge">Populer</div>
+          <div class="service-icon-wrap" style="--clr: #06b6d4">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+          </div>
+          <h3>Industri 4.0</h3>
+          <p>Transformasi digital pabrik dan industri dengan pemantauan real-time dan predictive maintenance.</p>
+          <ul class="service-features">
+            <li>Monitoring mesin real-time</li>
+            <li>Predictive maintenance AI</li>
+            <li>Dashboard analytics</li>
+          </ul>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-icon-wrap" style="--clr: #8b5cf6">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          </div>
+          <h3>Smart City</h3>
+          <p>Infrastruktur kota cerdas — manajemen lampu jalan, parkir, sampah, dan kualitas udara.</p>
+          <ul class="service-features">
+            <li>Manajemen infrastruktur</li>
+            <li>Sensor lingkungan</li>
+            <li>Optimasi energi kota</li>
+          </ul>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="service-icon-wrap" style="--clr: #10b981">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+          <h3>Monitoring & Analytics</h3>
+          <p>Platform dashboard real-time dengan visualisasi data canggih dan laporan otomatis.</p>
+          <ul class="service-features">
+            <li>Dashboard real-time</li>
+            <li>Laporan otomatis</li>
+            <li>Alert & notifikasi</li>
+          </ul>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="service-icon-wrap" style="--clr: #f59e0b">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <h3>Keamanan IoT</h3>
+          <p>Enkripsi end-to-end, autentikasi multi-faktor, dan audit keamanan untuk sistem IoT Anda.</p>
+          <ul class="service-features">
+            <li>Enkripsi TLS/SSL</li>
+            <li>Autentikasi perangkat</li>
+            <li>Audit keamanan berkala</li>
+          </ul>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="500">
+          <div class="service-icon-wrap" style="--clr: #ec4899">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+          <h3>Custom Development</h3>
+          <p>Pengembangan firmware, backend IoT, dan aplikasi mobile sesuai kebutuhan spesifik bisnis Anda.</p>
+          <ul class="service-features">
+            <li>Firmware embedded</li>
+            <li>Backend MQTT/REST</li>
+            <li>Mobile app IoT</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <div class="section-tag" data-aos="fade-up">Proyek</div>
+      <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Karya Terbaik Kami</h2>
+      <div class="projects-grid">
+        <div class="project-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="project-img" style="background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)">
+            <div class="project-icon-big">🏠</div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>Smart Home</span><span>ESP32</span></div>
+            <h3>Sistem Rumah Cerdas Terintegrasi</h3>
+            <p>Integrasi 30+ sensor dan aktuator dengan dashboard kontrol terpusat berbasis cloud.</p>
+            <div class="project-tech"><span>ESP32</span><span>MQTT</span><span>Node-RED</span><span>Firebase</span></div>
+          </div>
+        </div>
+        <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="project-img" style="background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)">
+            <div class="project-icon-big">🌿</div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>Agro-IoT</span><span>LoRa</span></div>
+            <h3>Smart Greenhouse Monitoring</h3>
+            <p>Pemantauan suhu, kelembaban, pH tanah, dan nutrisi tanaman secara real-time di 5 hektar lahan.</p>
+            <div class="project-tech"><span>LoRaWAN</span><span>Raspberry Pi</span><span>InfluxDB</span><span>Grafana</span></div>
+          </div>
+        </div>
+        <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="project-img" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%)">
+            <div class="project-icon-big">⚡</div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags"><span>Industri</span><span>Edge AI</span></div>
+            <h3>Predictive Maintenance Pabrik</h3>
+            <p>Sistem prediksi kerusakan mesin menggunakan ML dengan akurasi 94% dan penghematan biaya 40%.</p>
+            <div class="project-tech"><span>TensorFlow Lite</span><span>STM32</span><span>AWS IoT</span><span>Kafka</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section class="tech-stack">
+    <div class="container">
+      <p class="tech-label" data-aos="fade-up">Teknologi yang Kami Gunakan</p>
+      <div class="tech-scroll">
+        <div class="tech-track">
+          <div class="tech-item">ESP32</div>
+          <div class="tech-item">Raspberry Pi</div>
+          <div class="tech-item">MQTT</div>
+          <div class="tech-item">LoRaWAN</div>
+          <div class="tech-item">Node-RED</div>
+          <div class="tech-item">AWS IoT</div>
+          <div class="tech-item">Firebase</div>
+          <div class="tech-item">InfluxDB</div>
+          <div class="tech-item">Grafana</div>
+          <div class="tech-item">Arduino</div>
+          <div class="tech-item">FreeRTOS</div>
+          <div class="tech-item">Kubernetes</div>
+          <div class="tech-item">ESP32</div>
+          <div class="tech-item">Raspberry Pi</div>
+          <div class="tech-item">MQTT</div>
+          <div class="tech-item">LoRaWAN</div>
+          <div class="tech-item">Node-RED</div>
+          <div class="tech-item">AWS IoT</div>
+          <div class="tech-item">Firebase</div>
+          <div class="tech-item">InfluxDB</div>
+          <div class="tech-item">Grafana</div>
+          <div class="tech-item">Arduino</div>
+          <div class="tech-item">FreeRTOS</div>
+          <div class="tech-item">Kubernetes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-tag" data-aos="fade-up">Kontak</div>
+      <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Mulai Proyek Bersama Kami</h2>
+      <div class="contact-grid">
+        <div class="contact-info" data-aos="fade-right">
+          <h3>Hubungi Kami</h3>
+          <p>Siap membantu mewujudkan solusi IoT impian Anda. Konsultasi gratis untuk semua proyek.</p>
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-icon">📧</div>
+              <div>
+                <span class="contact-label">Email</span>
+                <span class="contact-value">hello@rofiqcp.com</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">📱</div>
+              <div>
+                <span class="contact-label">WhatsApp</span>
+                <span class="contact-value">+62 812 3456 7890</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">📍</div>
+              <div>
+                <span class="contact-label">Lokasi</span>
+                <span class="contact-value">Indonesia</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form glass-card" data-aos="fade-left" id="contactForm">
+          <div class="form-group">
+            <input type="text" id="name" placeholder="Nama Anda" required autocomplete="name" />
+            <label for="name">Nama Anda</label>
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" placeholder="Email Anda" required autocomplete="email" />
+            <label for="email">Email Anda</label>
+          </div>
+          <div class="form-group">
+            <select id="service">
+              <option value="" disabled selected>Pilih Layanan</option>
+              <option value="smarthome">Smart Home</option>
+              <option value="industri">Industri 4.0</option>
+              <option value="smartcity">Smart City</option>
+              <option value="monitoring">Monitoring & Analytics</option>
+              <option value="custom">Custom Development</option>
+            </select>
+            <label for="service">Layanan</label>
+          </div>
+          <div class="form-group">
+            <textarea id="message" rows="4" placeholder="Ceritakan proyek Anda..." required></textarea>
+            <label for="message">Pesan</label>
+          </div>
+          <button type="submit" class="btn-primary btn-full" id="submitBtn">
+            <span>Kirim Pesan</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="logo-icon small">
+              <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="8" stroke="url(#fg1)" stroke-width="2"/><circle cx="20" cy="20" r="3" fill="url(#fg1)"/><path d="M20 4 L20 12" stroke="url(#fg1)" stroke-width="2" stroke-linecap="round"/><path d="M20 28 L20 36" stroke="url(#fg1)" stroke-width="2" stroke-linecap="round"/><path d="M4 20 L12 20" stroke="url(#fg1)" stroke-width="2" stroke-linecap="round"/><path d="M28 20 L36 20" stroke="url(#fg1)" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="fg1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs></svg>
+            </div>
+            <span class="logo-text">Rofiq<span class="logo-accent">CP</span></span>
+          </div>
+          <p>Platform IoT terdepan untuk masa depan yang terhubung dan cerdas.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Layanan</h4>
+          <ul><li><a href="#services">Smart Home</a></li><li><a href="#services">Industri 4.0</a></li><li><a href="#services">Smart City</a></li><li><a href="#services">Custom Dev</a></li></ul>
+        </div>
+        <div class="footer-col">
+          <h4>Perusahaan</h4>
+          <ul><li><a href="#about">Tentang Kami</a></li><li><a href="#projects">Proyek</a></li><li><a href="#contact">Kontak</a></li></ul>
+        </div>
+        <div class="footer-col">
+          <h4>Sosial Media</h4>
+          <ul><li><a href="#">GitHub</a></li><li><a href="#">LinkedIn</a></li><li><a href="#">Instagram</a></li></ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 RofiqCP. All rights reserved.</p>
+        <p>Made with ❤️ in Indonesia</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
