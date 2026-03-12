@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3005:3005"
+    depends_on:
+      - user-service
+      - product-service
+      - order-service
+    environment:
+      - NODE_ENV=production
+
+  user-service:
+    build: ./services/user-service
+    ports:
+      - "3011:3011"
+
+  product-service:
+    build: ./services/product-service
+    ports:
+      - "3012:3012"
+
+  order-service:
+    build: ./services/order-service
+    ports:
+      - "3013:3013"
+    depends_on:
+      - product-service
+      - user-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - api-gateway

@@ -1,0 +1,13 @@
+{
+  "name": "ecommerce-microservices",
+  "version": "1.0.0",
+  "scripts": {
+    "gateway": "cd api-gateway && node server.js",
+    "user-service": "cd services/user-service && node server.js",
+    "product-service": "cd services/product-service && node server.js",
+    "order-service": "cd services/order-service && node server.js",
+    "install:all": "cd api-gateway && npm install && cd ../services/user-service && npm install && cd ../services/product-service && npm install && cd ../services/order-service && npm install && cd ../../frontend && npm install",
+    "dev": "concurrently \"npm run gateway\" \"npm run user-service\" \"npm run product-service\" \"npm run order-service\""
+  },
+  "dependencies": { "concurrently": "^8.2.0" }
+}
