@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { background-color: #022c22; color: #ecfdf5; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #065f46; }
+::-webkit-scrollbar-thumb { background: #059669; border-radius: 3px; }

@@ -1,0 +1,14 @@
+{
+  "name": "ecommerce-platform",
+  "version": "1.0.0",
+  "description": "E-Commerce Full-Stack Platform - PostgreSQL + Redis + Stripe",
+  "scripts": {
+    "server": "cd backend && npm start",
+    "client": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
