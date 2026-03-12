@@ -2,8 +2,18 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/database');
 const auth = require('../middleware/auth');
+const rateLimit = require('express-rate-limit');
 
-// All routes require auth
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  message: { error: 'Too many requests, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// All routes require auth and rate limiting
+router.use(apiLimiter);
 router.use(auth);
 
 // GET /api/notes - list all notes for user
